@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col s12 m12 l4 " ng-repeat="game in gameList ">
+    <div class="card">
+      <div class="card-image">
+        <img src="{{ game[3] }}" />
+        <span class="card-title">{{ game[2] }}</span>
+        <a class="btn-floating halfway-fab waves-effect waves-light red"
+          ><i class="material-icons activator">add</i></a
+        >
+      </div>
+      <div class="card-content">
+        <div class="row">
+          <div class="col s6">
+            <!-- <ngStar></ngStar>
+            <w3-test-directive title="4"></w3-test-directive> -->
+
+            <span
+              ng-repeat="x in [].constructor(4) track by $index"
+              class="fa fa-star checked"
+            ></span>
+          </div>
+          <div class="col s6">
+            <h6>{{ game[1] | currency: "₹":0 }}</h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s6">
+            <a
+              href="#"
+              class="btn waves-effect waves-dark yellow darken-2 btn-block"
+              ng-click="buy($index)"
+              >Buy</a
+            >
+          </div>
+          <div class="col s6">
+            <a
+              href="#"
+              class="btn waves-effect waves-light yellow darken-3 btn-block"
+              ng-click="bid($index)"
+              >Bid
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4"
+          >Card Title<i class="material-icons right">close</i></span
+        >
+        <p>
+          Here is some more information about this product that is only revealed
+          once clicked on.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

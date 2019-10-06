@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Game Stock Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+       <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.0/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        /* header,
+        main,
+        footer,
+        .content {
+            padding-left: 300px;
+        } */
+
+        @media only screen and (max-width : 992px) {
+
+            header,
+            main,
+            footer,
+            .content {
+                padding-left: 0;
+            }
+        }
+         .btn-block {
+            width: 100%;
+        }
+        .checked {
+  color: orange;
+}
+.card{
+	height: 450px;
+}
+/* #loading{
+   width: 100%; //fallback
+   width: 100vw;
+} */
+    </style>
+</head>
+
+
+<body ng-app="admin"  ng-controller="AdminController">
+<nav class="indigo darken-2">
+    <div class="nav wrapper">
+        
+            <a href="" class="brand-logo hide-on-med-and-down" style="padding-left: 60px;">Game Stock Portal</a>
+            <a href="" class="brand-logo hide-on-large-only">Game Stock Portal</a>
+            <a href="#" class="sidenav-trigger show-on-large" data-target="slide-out"><i
+                    class="material-icons">menu</i></a>
+            <!-- <a href="" class="button-collapse show-on-large" data-activates="sidenav"><i class="material-icons">menu</i></a> -->
+            <ul class="right hide-on-small-and-down">
+                <li><a href="#">BlockChain Based Game Stock Portal</a></li>
+
+            </ul>
+      
+    </div>
+</nav>
+<ul class="right collection hide-on-small-and-down" style="margin:0px;
+                  border: 0px solid transparent">
+
+
+</ul>
+</div>
+</div>
+</nav>
+
+<ul id="slide-out" class="sidenav">
+    <!-- <li>
+        <div class="user-view">
+            <div class="background">
+                <img src="https://materializecss.com/images/office.jpg" alt="" class="responsive-img">
+            </div>
+            <a href="">
+                <img src="https://materializecss.com/images/yuna.jpg" alt="" class="circle">
+            </a>
+            <span class="white-text name">{{name}}</span>
+            <span class="white-text email">{{emailid}}</span>
+        </div>
+    </li> -->
+
+    <li>
+        <a href="#!stats" class="waves-effect waves-ripple"><i class="material-icons blue-text">dashboard</i>Statistics
+        </a>
+    </li>
+    <li>
+        <a href="#!game_search" class="waves-effect waves-ripple"><i class="material-icons blue-text">search</i>Search
+        </a>
+    </li>
+   
+
+
+    <div class="divider"></div>
+
+    <li>
+        <a  href="#helpApp" class="modal-trigger waves-effect waves-ripple"><i class="waves-effect waves-light material-icons blue-text">help</i>Help
+        </a>
+    </li>
+    <li>
+        <a class="waves-effect waves-ripple modal-trigger" href="#aboutApp"><i class="waves-effect waves-light material-icons blue-text">description</i>About App
+        </a>
+    </li>
+    <li>
+        <a href="#" class="waves-effect waves-ripple"><i class="material-icons blue-text">exit_to_app</i>Logout
+        </a>
+    </li>
+</ul>
+
+
+
+<div class="content">
+<div ng-show="loadingStatus" id="loading">
+    <img src="loading.gif" alt="">
+</div>
+    <div ng-view></div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $(".sidenav").sidenav();
+        $('.dropdown-trigger').dropdown();
+        $('.modal').modal();
+
+    });
+
+</script>
+
+<script>
+    var app = angular.module("admin", ["ngRoute"]);
+    app.config(function ($routeProvider) {
+        $routeProvider
+            .when("/",{
+                templateUrl: "game_search.html"
+            })
+            .when("/game_search",{
+                templateUrl: "game_search.html"
+            })
+            .when("/stats",{
+                templateUrl: "stats.html"
+            });
+    });
+    app.directive("w3TestDirective", function() {
+        // console.log(data)
+    return {
+        
+   
+        template : "<span class='fa fa-star checked'></span>"
+    };
+    });
+    app.directive('ngStar',function(){
+
+    return {
+        template: '<span class="fa fa-star checked">tes</span>'
+    }
+    });
+//     app.directive('loading', function () {
+//       return {
+//         restrict: 'E',
+//         replace:true,
+//         template: '<div class="loading"><img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" />LOADING...</div>',
+//         link: function (scope, element, attr) {
+//               scope.$watch('loading', function (val) {
+//                   if (val)
+//                       scope.loadingStatus = 'true';
+//                   else
+//                       scope.loadingStatus = 'false';
+//               });
+//         }
+//       }
+//   })
+
+    app.controller("AdminController", function ($scope, $window,$http) {
+        $scope.loadingStatus = false;
+       $scope.gameList=[];
+	   
+       var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
+        console.log(web3);
+        var address = "0x3d9F7cdbFB3341262a909F5a57BdE15337F65544";
+        var abi = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"name": "_url",
+				"type": "string"
+			},
+			{
+				"name": "_name",
+				"type": "string"
+			}
+		],
+		"name": "addGame",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "decideTransfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_choice",
+				"type": "uint256"
+			},
+			{
+				"name": "_idItem",
+				"type": "uint256"
+			}
+		],
+		"name": "setBidderInfo",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "setBidingTime",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_choice",
+				"type": "uint256"
+			}
+		],
+		"name": "setBuyerInfo",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_choice",
+				"type": "uint256"
+			}
+		],
+		"name": "Vote",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "bidders",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bii",
+		"outputs": [
+			{
+				"name": "bidder",
+				"type": "address"
+			},
+			{
+				"name": "idItem",
+				"type": "uint256"
+			},
+			{
+				"name": "choice",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bui",
+		"outputs": [
+			{
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"name": "choice",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "buyers",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "endBidTime",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "j",
+				"type": "uint256"
+			}
+		],
+		"name": "getAllGames",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "gi",
+		"outputs": [
+			{
+				"name": "Pricechoice",
+				"type": "uint256"
+			},
+			{
+				"name": "decidedPrice",
+				"type": "uint256"
+			},
+			{
+				"name": "totalBuyer",
+				"type": "uint256"
+			},
+			{
+				"name": "totalVote",
+				"type": "uint256"
+			},
+			{
+				"name": "choice",
+				"type": "uint256"
+			},
+			{
+				"name": "url",
+				"type": "string"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "startBidTime",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "voteStatus",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+ $scope.contract = new web3.eth.Contract(abi, address);
+
+// for(var i=0;i<2;i++){
+	web3.eth
+			.getAccounts()
+			.then(function(accounts) {
+				var acc = accounts[0];
+				return $scope.contract.methods.getAllGames(0).call({ from : acc });
+			})
+			.then(function(tx) {
+				$scope.gameList.push(tx);
+				console.log(tx);
+			});
+			web3.eth
+			.getAccounts()
+			.then(function(accounts) {
+				var acc = accounts[0];
+				return $scope.contract.methods.getAllGames(1).call({ from : acc });
+			})
+			.then(function(tx) {
+				$scope.gameList.push(tx);
+				console.log(tx);
+			});
+			web3.eth
+			.getAccounts()
+			.then(function(accounts) {
+				var acc = accounts[0];
+				return $scope.contract.methods.getAllGames(2).call({ from : acc });
+			})
+			.then(function(tx) {
+				$scope.gameList.push(tx);
+				console.log(tx);
+			});
+	//    }
+	   console.log($scope.gameList)
+        // console.log(contract);
+    //    $scope.contract.methods
+    //       .Pricechoice1()
+    //       .call()
+    //       .then(function(bal) {
+    //         // $("#amt").val(bal);
+    //         console.log(bal);
+    //       });
+$scope.buy=function(index){
+    $scope.toast("Buying Game  ","blue")
+    console.log("buyer"+$scope.gameList[index][0])
+web3.eth
+            .getAccounts()
+            .then(function(accounts) {
+                console.log(accounts)
+              var acc = accounts[0];
+              return $scope.contract.methods.setBuyerInfo($scope.gameList[index][0]).send({ from: acc });
+            })
+            .then(function(tx) {
+              console.log(tx);
+			  $scope.toast("Buying Successfull","green")
+            });
+}
+$scope.bid=function(index){
+	$scope.toast("Bidding Game  ","blue")
+     web3.eth
+            .getAccounts()
+            .then(function(accounts) {
+                console.log(accounts)
+              var acc = accounts[0];
+              return $scope.contract.methods.setBidderInfo($scope.gameList[index][0],0).send({ from: acc });
+            })
+            .then(function(tx) {
+              $scope.toast("Bidding Successfull","green")
+            });
+ console.log("bidder"+$scope.gameList[index].gameid)
+}
+$scope.pricedecider=function(){
+ 
+}
+
+        $scope.toast=function(data,color){
+            var col='rounded ';
+            col+=color;
+            console.log(col);
+            M.toast({
+                html: data,
+                classes: col
+            });
+        }
+        $scope.stats=function(){
+            console.log("data")
+            var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        events:["click","mousemove"]
+    }
+});
+        }
+        
+
+    });
+</script>
+<div id="aboutApp" class="modal">
+    <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+</div>
+<div id="helpApp" class="modal">
+    <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+</div>
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+        {{updateProductType}}
+
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" type="text" class="validate" required ng-model="updateProductType.productName">
+                    <label for="name" class="">Product Name</label>
+                    <span class="helper-text" data-error="Please Input Correct Name" data-success="Correct"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="desc" type="text" class="validate" required ng-model="updateProductType.description">
+                    <label for="desc" class="">Description</label>
+                    <span class="helper-text" data-error="Please Input Description" data-success="Correct"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="commission" type="text" class="validate" required ng-model="updateProductType.commision">
+                    <label for="commission" class="">Commission</label>
+                    <span class="helper-text" data-error="Please Input Correct Commission" data-success="Correct"></span>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light indigo" ng-click="updateProductDb()"
+                        style="width:100%;">Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="modal2" class="modal">
+    <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+        {{updateProductType}}
+
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name1" type="text" class="validate" required ng-model="addproduct.productName">
+                    <label for="name1" class="">Product Name</label>
+                    <span class="helper-text" data-error="Please Input Correct Name" data-success="Correct"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="desc1" type="text" class="validate" required ng-model="addproduct.description">
+                    <label for="desc1" class="">Description</label>
+                    <span class="helper-text" data-error="Please Input Description" data-success="Correct"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="commission1" type="text" class="validate" required ng-model="addproduct.commision">
+                    <label for="commission1" class="">Commission</label>
+                    <span class="helper-text" data-error="Please Input Correct Commission" data-success="Correct"></span>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light indigo" ng-click="addProduct()"
+                        style="width:100%;">Add Product
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
